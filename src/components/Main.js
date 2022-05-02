@@ -4,11 +4,11 @@ import Dice from "./Dice"
 export default function Main(props) {
 
     const [diceStates, setDiceStates] = React.useState(() => {
-        return createTable(6)
+        return createTable(10)
     })
 
     function generateRandomNumber(number) {
-        return Math.floor(Math.random() * number);
+        return Math.floor(Math.random() * number) + 1;
     }
 
     function selectDice(index) {
