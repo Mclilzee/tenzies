@@ -4,6 +4,7 @@ export default function Dice(props) {
 
     function handleButtonClick() {
         props.selectDice(props.index);
+
     }
 
     return (

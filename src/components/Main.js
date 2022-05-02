@@ -14,14 +14,20 @@ export default function Main(props) {
     function selectDice(index) {
 
         setDiceStates(prevArray => {
-            const newArray = [...prevArray];
-            console.log(newArray)
-            newArray[index].isSelected = !prevArray[index].isSelected;
-            return newArray;
+            return prevArray.map((diceItem, diceIndex) => {
+                return diceIndex === index ? {...diceItem, isSelected: !diceItem.isSelected} :
+                    {...diceItem}
+            })
         })
     }
 
     function rollDice() {
+
+        if (isGameOver()) {
+            setDiceStates(createTable(10));
+            return;
+        }
+
         setDiceStates(prevArray => {
             return prevArray.map(dice => {
                 return dice.isSelected ? {...dice} :
@@ -53,24 +59,21 @@ export default function Main(props) {
         />
     })
 
-    function checkIfGameOver() {
+    function isGameOver() {
         for (let i = 0; i < diceStates.length - 1; i++) {
-            if (diceStates[i].number !== diceStates[i + 1]) {
+            if (diceStates[i].number !== diceStates[i + 1].number) {
                 return false;
             }
         }
-
         return true;
     }
-
-    const isGameOver = checkIfGameOver();
 
     return (
         <div>
             <div className="diceContainer">
                 {diceTable}
             </div>
-            <button onClick={rollDice}>{isGameOver ? "Reset Game" : "Roll"}</button>
+            <button onClick={rollDice}>{isGameOver() ? "Reset" : "Roll"}</button>
 
         </div>
     )
