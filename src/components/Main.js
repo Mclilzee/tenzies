@@ -7,16 +7,26 @@ export default function Main(props) {
         return createTable(10)
     })
 
-    function generateRandomNumber(number) {
-        return Math.floor(Math.random() * number) + 1;
+    function generateRandomNumber() {
+        return Math.floor(Math.random() * 6) + 1;
     }
 
     function selectDice(index) {
 
         setDiceStates(prevArray => {
-           const newArray = [...prevArray];
-           newArray[index].isSelected = !prevArray[index].isSelected;
-           return newArray;
+            const newArray = [...prevArray];
+            console.log(newArray)
+            newArray[index].isSelected = !prevArray[index].isSelected;
+            return newArray;
+        })
+    }
+
+    function rollDice() {
+        setDiceStates(prevArray => {
+            return prevArray.map(dice => {
+                return dice.isSelected ? {...dice} :
+                    {...dice, number: generateRandomNumber()}
+            })
         })
     }
 
@@ -24,7 +34,7 @@ export default function Main(props) {
         const table = []
         for (let i = 0; i < size; i++) {
             const dice = {
-                number: generateRandomNumber(6),
+                number: generateRandomNumber(),
                 isSelected: false
             }
 
@@ -43,10 +53,25 @@ export default function Main(props) {
         />
     })
 
+    function checkIfGameOver() {
+        for (let i = 0; i < diceStates.length - 1; i++) {
+            if (diceStates[i].number !== diceStates[i + 1]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    const isGameOver = checkIfGameOver();
 
     return (
-        <div className="diceContainer">
-            {diceTable}
+        <div>
+            <div className="diceContainer">
+                {diceTable}
+            </div>
+            <button onClick={rollDice}>{isGameOver ? "Reset Game" : "Roll"}</button>
+
         </div>
     )
 }
